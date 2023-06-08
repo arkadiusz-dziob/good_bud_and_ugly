@@ -18,6 +18,12 @@ public class Item {
 	@Column(nullable = false)
 	private String name;
 
+	public Item() {}
+	
+	public Item(String name) {
+		this.name = name;
+	}
+
 	public Long getItemId() {
 		return itemId;
 	}

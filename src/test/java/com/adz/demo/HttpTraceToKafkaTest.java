@@ -19,7 +19,7 @@ import com.adz.demo.boundaries.kafka.KafkaConsumer;
 @DirtiesContext
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
-public class  DemoApplicationTests {
+public class  HttpTraceToKafkaTest {
 
 	@Value(value="${local.server.port}")
 	private int port;

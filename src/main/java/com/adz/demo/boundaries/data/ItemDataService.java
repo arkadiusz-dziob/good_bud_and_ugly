@@ -3,26 +3,29 @@ package com.adz.demo.boundaries.data;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.adz.demo.boundaries.data.repositories.ItemRepository;
+import com.adz.demo.boundaries.data.repositories.PageableItemRepository;
 import com.adz.demo.model.Item;
 
 @Component
 public class ItemDataService {
 	
 	private final ItemRepository itemRepository;
+	private final PageableItemRepository pageableItemRepository;
 
-	public ItemDataService(ItemRepository itemRepository) {
+	public ItemDataService(ItemRepository itemRepository, 
+						   PageableItemRepository pageableItemRepository) {
 		this.itemRepository = itemRepository;
+		this.pageableItemRepository = pageableItemRepository;
 	}
 
 	public Optional<Item> create(Item item) {
-		if (item.getItemId() != null && !itemRepository.existsById(item.getItemId())) {
-			return Optional.ofNullable(itemRepository.save(item));
-		}
-		return Optional.empty();
+		return Optional.ofNullable(itemRepository.save(item));
 	}
 
 	public Optional<Item> getById(Long itemId) {
@@ -48,6 +51,10 @@ public class ItemDataService {
 
 	public List<Item> create(List<Item> items) {
 		return itemRepository.saveAll(items);
+	}
+
+	public Page<Item> findAllPage(Pageable pageable) {
+		return pageableItemRepository.findAll(pageable);
 	}
 
 }

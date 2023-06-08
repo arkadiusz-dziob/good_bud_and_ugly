@@ -9,19 +9,17 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.adz.demo.config.HttpLoggingFilter;
-
-@Component
+//@Component
 public class KafkaConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
     
     private volatile List<String> payloads = new ArrayList<>();
 
-    @KafkaListener(topics = HttpLoggingFilter.KAFKA_HTTP_TRACE_TOPIC, groupId = "adz")
+    //@KafkaListener(topics = "${kafka.topic}")
     public void receive(@Payload String payload) {
-    	payloads.add(payload);
-    	log.info("received payload='{}'", payload);
+     	payloads.add(payload);
+     	log.info("received payload='{}'", payload);
     }
 
     public List<String> getPayloads() {

@@ -18,6 +18,7 @@ import org.apache.commons.io.output.TeeOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.adz.demo.boundaries.kafka.KafkaProducer;
@@ -42,10 +43,11 @@ public class HttpLoggingFilter implements Filter {
 	
 	private static final Logger log = LoggerFactory.getLogger(HttpLoggingFilter.class);
 	
-	public static final String KAFKA_HTTP_TRACE_TOPIC = "KAFKA_HTTP_TRACE_TOPIC";
+	@Value("${kafka.topic}")
+    private String topic;
 
-	@Autowired
-	KafkaProducer kafkaProducer;
+	//@Autowired
+	//KafkaProducer kafkaProducer;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -79,7 +81,7 @@ public class HttpLoggingFilter implements Filter {
             chain.doFilter(bufferedRequest, bufferedResponse);
             logMessage.append(" [RESPONSE:")
                     .append(bufferedResponse.getContent()).append("]");
-            kafkaProducer.send(KAFKA_HTTP_TRACE_TOPIC, logMessage.toString());
+           // kafkaProducer.send(topic, logMessage.toString());
         } catch (Throwable a) {
             log.error(a.getMessage());
         }
