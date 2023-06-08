@@ -46,8 +46,8 @@ public class HttpLoggingFilter implements Filter {
 	@Value("${kafka.topic}")
     private String topic;
 
-	//@Autowired
-	//KafkaProducer kafkaProducer;
+	@Autowired
+	KafkaProducer kafkaProducer;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

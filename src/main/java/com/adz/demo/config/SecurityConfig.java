@@ -1,9 +1,9 @@
 package com.adz.demo.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,19 +16,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @Profile("prod")
 public class SecurityConfig
 {
-  @Autowired
-  private CurrentBasicAuthenticationEntryPoint authenticationEntryPoint;
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-      http.authorizeHttpRequests()
-              .requestMatchers("/api/**").authenticated()
-              .anyRequest().permitAll()
-              .and()
-              .httpBasic(basic -> basic
-                      .authenticationEntryPoint(authenticationEntryPoint));
-    return http.build();
+  public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+	  http
+  		 	.authorizeHttpRequests((authorizeHttpRequests) ->
+  		 		authorizeHttpRequests
+  			 		.requestMatchers("/api/**").hasRole("USER_ROLE")
+ 			 		.requestMatchers("/swagger-ui/**").permitAll()
+ 			 		.requestMatchers("/v3/**").permitAll()
+  		 	).httpBasic(Customizer.withDefaults());
+	    
+  		return http.build();
   }
+
 
   @Bean
   public InMemoryUserDetailsManager userDetailsService() {
